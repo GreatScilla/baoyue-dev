@@ -1,0 +1,108 @@
+/deep/.el-pager {
+    color: #fff;
+  }
+  /deep/.el-pagination__total,
+  /deep/.el-pagination__jump {
+    color: #077ead;
+  }
+  /deep/ .btn-prev,
+  /deep/.btn-next {
+    border: 1px solid #077ead;
+    color: #077ead !important;
+    background-color: transparent !important;
+  }
+  /deep/.el-pager li:not(.disabled).active {
+    color: #fff!important;
+  }
+  /deep/.el-pager li {
+    border: 1px solid #077ead;
+    color: #077ead !important;
+    background-color: transparent !important;
+  }
+  .searchRow {
+    display: flex;
+    align-items: center;
+  }
+  /deep/.el-input__inner:focus {
+    border-color: #077ead;
+  }
+  /deep/.el-select .el-input.is-focus .el-input__inner {
+    border-color: #077ead;
+  }
+  /deep/.el-form-item__label {
+    color: #fff;
+  }
+  .el-form-item {
+    margin-right: 2%;
+  }
+  /deep/.el-input__inner {
+    background-color: transparent;
+    color: #fff;
+    border-radius: 0;
+    border-color: #077ead;
+  }
+  /deep/.searchButton {
+    background: #1f4283 !important;
+    color: #fff;
+    border-color: #077ead;
+    border-radius: 4px !important;
+  }
+  .pagination-wrapper {
+    padding: 1%;
+  }
+  /deep/.el-table__header {
+    border-radius: 5px;
+    font-size: 14px;
+    background-color: rgba(16, 40, 104, 1);
+  }
+  // /deep/.el-table--scrollable-y {
+  //   overflow-y: hidden !important;
+  // }
+  // /deep/ .el-table__body-wrapper {
+  //   overflow-y: hidden !important;
+  // }
+  /deep/.el-table__body-wrapper::-webkit-scrollbar {
+    /*width: 0;宽度为0隐藏*/
+    width: 0px !important;
+  }
+  /deep/.el-table__body-wrapper::-webkit-scrollbar-thumb {
+    border-radius: 0px; 
+    background-color: transparent; 
+}
+  .el-table::before {
+    height: 0px;
+  }
+  .el-table {
+    /deep/th {
+      padding: 0 !important;
+    }
+    /deep/tr {
+      background-color: transparent;
+      color: #fff;
+    }
+    /deep/.cell {
+      font-size: 14px;
+      height: 23px;
+      line-height: 23px;
+      margin: 5px 0;
+      text-align: center;
+    }
+    background-color: transparent !important;
+  
+    /deep/ th,
+    tr,
+    td {
+      border: 0;
+      background-color: transparent !important;
+      border-bottom: none !important;
+    }
+    /deep/ .el-table__body tr:hover > td {
+      background-color: transparent;
+    }
+  }
+  /deep/ .el-table__row > td {
+    border-bottom: none;
+  }
+  /deep/.even-row {
+    background-color: #0d3063 !important;
+  }

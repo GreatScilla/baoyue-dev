@@ -1,0 +1,412 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0">
+    <link rel="icon" href="./favicon.ico">
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/element-ui/lib/theme-chalk/index.css">
+    <script src="https://data.avuejs.com/cdn/vue/2.5.2/vue.min.js" charset="utf-8"></script>
+    <script src="https://unpkg.com/element-ui/lib/index.js"></script>
+    <script src="https://cdn.bootcss.com/echarts/4.2.1-rc1/echarts.min.js"></script>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+
+        .views {
+            overflow-y: hidden;
+        }
+
+        .box {
+            background-color: transparent;
+            display: flex;
+        }
+
+        #main {
+            flex: 4
+        }
+
+        .dataBox {
+            flex: 1;
+        }
+
+        .dataCont {
+            background-color: #0d1e5c;
+            width: 140px;
+            height: 240px;
+            text-align: left;
+            margin-top: 20px;
+            margin-left: 10px;
+            border-radius: 10px;
+            color: white;
+            padding: 10px 0 0 10px;
+            display: flex;
+            place-content: space-around space-around;
+            flex-flow: column nowrap;
+            /* align-items: space-around; */
+        }
+
+        .classNum {
+            margin-bottom: 8px;
+        }
+    </style>
+
+    <script>
+    </script>
+</head>
+
+<body>
+
+    <div id="app">
+        <div class="box">
+            <div id="main" style="width: 700px;height:280px;"></div>
+            <div class="dataBox">
+                <div class="dataCont">
+                    <div>
+                        <p class="classNum">白班班组:A班</p>
+                        <p class="classNum">车间主任:彭立满</p>
+                        <p class="classNum">浇筑量:{{numA}}</p>
+                    </div>
+                    <div>
+                        <p class="classNum">夜班班组:B班</p>
+                        <p class="classNum">车间主任:邓宁</p>
+                        <p class="classNum">浇筑量:{{numB}}</p>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script src=""></script>
+    <script>
+        new Vue({
+            el: '#app',
+            data() {
+                return {
+                    className: "",
+                    classMonitor: "",
+                    numA: "",
+                    numB: "",
+                    timer: null
+
+                }
+            },
+
+            created() {
+                this.timer = setInterval(() => {
+                    this.drawLine()
+                    // console.log(1);
+                }, 600000) // 5s
+            },
+            mounted() {
+                this.drawLine();
+            },
+            methods: {
+                drawLine() {
+                    let _this = this
+                    let tenantId = JSON.parse(localStorage.getItem("saber-tenantId")).content
+                    let authorization = JSON.parse(localStorage.getItem("saber-Authorization")).content
+                    let bladeAuth = JSON.parse(localStorage.getItem("saber-token")).content
+                    let headers = {
+                        "Tenant-Id": tenantId,
+                        "Authorization": authorization,
+                        "Blade-Auth": "bearer " + bladeAuth
+                    }
+                    var dataA = null;
+                    var dataB = null;
+                    //这家公司后端老为难前端。。。。。
+                    $.ajax({
+                        type: "get",
+                        data: {},
+                        headers: headers,
+                        dataType: 'json',
+                        contentType: 'application/x-www-form-urlencoded',
+                        processData: true,
+                        url: '/api/blade-rcm/pl/getPlSelectBITwoResp',
+                        cache: false,
+                        async: false,
+                        success: function (result) {
+                            if (result.success) {
+                                dataA = JSON.parse(result.data[0].sum1)
+                                // _this.numA = eval(dataA.join("+"))
+                                _this.numA = dataA[dataA.length - 1]
+                                dataB = JSON.parse(result.data[1].sum1)
+                                // _this.numB = eval(dataB.join("+"))
+                                _this.numB = dataB[dataB.length - 1]
+                            }
+                        },
+                        error: function (err) {
+                        }
+                    });
+                    var myChart = echarts.init(document.getElementById('main'));
+                    var option = {
+                        // title: {
+                        //     text: '班组生产曲线',
+                        //     x: "45",
+                        //     y: "15",
+                        //     textStyle: {
+                        //         fontSize: 24,
+                        //         fontWeight: '700',
+                        //         color: '#2fc0f9'                             // 主标题文字颜色
+                        //     },
+                        // },
+                        tooltip: {
+                            trigger: 'axis',
+                            axisPointer: {
+                                lineStyle: {
+                                    type: 'dotted',
+                                    color: {
+                                        type: 'linear',
+                                        x: 0,
+                                        y: 0,
+                                        x2: 0,
+                                        y2: 1,
+                                        colorStops: [{
+                                            offset: 0,
+                                            color: 'rgba(255,255,255,0)'
+                                        }, {
+                                            offset: 1,
+                                            color: 'rgba(255,255,255,0.3)',
+                                        }],
+                                        global: false
+                                    }
+                                },
+                            },
+                            // formatter: function (params) {
+                            //     console.log(params);
+                            //     var showHtm = "";
+                            //     // for (var i = 0; i < params.length; i++) {
+                            //     //     showHtm =
+                            //     //         "<span style='display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:" +
+                            //     //         yAxisAxisLabelColor +
+                            //     //         ";'></span>" +
+                            //     //         params[0].seriesName +
+                            //     //         ":" +
+                            //     //         params[0].value +
+                            //     //         "<br>" +
+                            //     //         '<span style="display:inline-block;margin-right:4px;border-radius:10px;width:10px;height:10px;background-color:#05d3ed;"></span>' +
+                            //     //         params[1].seriesName +
+                            //     //         ":" +
+                            //     //         params[1].value;
+                            //     // }
+                            //     return showHtm;
+                            // },
+                        },
+                        legend: {
+
+                            x: 'center',
+                            y: '15',
+                            icon: 'circle',
+                            itemGap: 8,
+                            textStyle: { color: 'rgba(255,255,255,.5)' },
+                            itemWidth: 10,
+                            itemHeight: 10,
+                        },
+                        grid: {
+                            left: '20',
+                            top: '60',
+                            right: '15',
+                            bottom: '0',
+                            containLabel: true
+                        },
+                        xAxis: [{
+                            type: 'category',
+                            boundaryGap: false,
+                            splitLine: {
+                                show: false,
+                            },
+                            axisTick: { show: false },
+                            data: ['06:00', '07:00', '08:00', '09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00', '18:00'],
+                            axisLabel: {
+                                textStyle: {
+                                    color: '#fff'
+                                },
+
+                            },
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#1357e3',
+                                }
+                            },
+                        },
+                        {
+                            type: 'category',
+                            position: 'bottom',
+                            offset: 20,
+                            axisPointer: {
+                                type: 'none'
+                            },
+                            boundaryGap: false,
+                            splitLine: {
+                                show: false,
+                            },
+                            axisTick: { show: false },
+                            axisLabel: {
+                                textStyle: {
+                                    color: '#fff'
+                                },
+
+                            },
+                            axisLine: {
+                                lineStyle: {
+                                    color: '#1357e3',
+                                }
+                            },
+                            data: ['18:00', '19:00', '20:00', '21:00', '22:00', '23:00', '24:00', '01:00', '02:00', '03:00', '04:00', '05:00', '06:00'],
+                        }],
+                        yAxis: [{
+                            type: 'value',
+                            max: 200,
+                            min: 0,
+                            axisTick: { show: false },
+                            splitNumber: 5,
+                            axisLabel: {
+                                textStyle: {
+                                    color: '#fff'
+                                },
+                            },
+                            axisLine: { show: false },
+                            splitLine: {
+                                show: true,
+                                lineStyle: {
+                                    color: '#1357e3',
+                                    type: 'solid'
+                                }
+                            }
+                        }],
+                        series: [{
+                            name: 'A班',
+                            type: 'line',
+                            xAxisIndex: 0,
+                            smooth: true,
+                            symbol: 'circle',
+                            symbolSize: 4,
+                            showSymbol: false,
+                            lineStyle: {
+                                normal: {
+                                    color: '#00b3f4',
+                                    width: 2,
+                                    // shadowColor: 'rgba(0, 0, 0, .5)',
+                                    // shadowBlur: 3,
+                                    // shadowOffsetY: 3,
+                                    // shadowOffsetX: 4,
+                                }
+                            },
+                            areaStyle: {
+                                normal: {
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                        offset: 0,
+                                        color: 'rgba(0,179,244,0.3)'
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: 'rgba(0,179,244,0)'
+                                    }
+                                    ], false),
+                                    shadowColor: 'rgba(0,179,244, 0.9)',
+                                    shadowBlur: 20
+                                }
+                            },
+                            itemStyle: {
+                                normal: {
+                                    color: 'rgba(0,179,244,.8)',
+                                    borderColor: 'rgba(0,179,244,.3)',
+                                    borderWidth: 7,
+                                    shadowColor: 'rgba(0, 0, 0, .4)',
+                                    shadowBlur: 3,
+                                    shadowOffsetY: 3,
+                                    shadowOffsetX: 3
+                                }
+                            },
+                            data: dataA,
+                            // data: [10, 20, 30, 40, 50, 70, 90, 110, 120, 140, 150, 160, 200],
+                            markLine: { // 非直线设置
+                                silent: true,
+                                lineStyle: {
+                                    normal: {
+                                        color: '#d0021b',
+                                        // type:'solid',
+                                        width: 2,                   // 这儿设置安全基线颜色
+                                    }
+                                },
+                                data: [
+                                    [{
+                                        symbol: 'none',
+                                        xAxis: 0,
+                                        yAxis: 0
+                                    }, {
+                                        symbol: 'none',
+                                        xAxis: 12,
+                                        yAxis: 180
+                                    }],
+                                ]
+                            }
+                        }
+                            ,
+                        {
+                            name: 'B班',
+                            type: 'line',
+                            xAxisIndex: 1,
+                            smooth: true,
+                            symbol: 'circle',
+                            symbolSize: 4,
+                            showSymbol: false,
+                            lineStyle: {
+                                normal: {
+                                    color: '#00ca95',
+                                    width: 2,
+                                    // shadowColor: 'rgba(0, 0, 0, .5)',
+                                    // shadowBlur: 3,
+                                    // shadowOffsetY: 3,
+                                    // shadowOffsetX: 4,
+                                }
+                            },
+                            areaStyle: {
+                                normal: {
+                                    color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [{
+                                        offset: 0,
+                                        color: 'rgba(0,202,149,0.3)'
+                                    },
+                                    {
+                                        offset: 1,
+                                        color: 'rgba(0,202,149,0)'
+                                    }
+                                    ], false),
+                                    shadowColor: 'rgba(0,202,149, 0.9)',
+                                    shadowBlur: 20
+                                }
+                            }, itemStyle: {
+                                normal: {
+                                    color: 'rgba(0,202,149,.8)',
+                                    borderColor: 'rgba(0,202,149,.3)',
+                                    borderWidth: 7,
+                                    shadowColor: 'rgba(0, 0, 0, .5)',
+                                    shadowBlur: 3,
+                                    shadowOffsetY: 3,
+                                    shadowOffsetX: 3,
+                                }
+                            },
+
+                            data: dataB,
+                            // data: [5, 15, 25, 45, 65, 55, 86, 98, 100, 145, 170, 220, 200],
+
+                        }]
+                    };
+                    myChart.setOption(option);
+                }
+
+            },
+
+            destroyed() {
+                clearInterval(this.timer)
+            }
+        })
+    </script>
+</body>
+
+</html>

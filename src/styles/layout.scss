@@ -1,0 +1,102 @@
+.margin-bottom-20 {
+  margin-bottom: 20px;
+}
+.margin-right-20 {
+  margin-right: 20px;
+}
+
+.margin-top-20 {
+  margin-top: 20px;
+}
+
+.margin-left-20 {
+  margin-left: 20px;
+}
+
+.padding-right-10 {
+  padding-right: 10px
+}
+
+.padding-top-20 {
+  padding-top: 20px;
+}
+.float-right {
+  float: right;
+}
+
+.cursor-style {
+  cursor: pointer;
+}
+
+.inline-box {
+  display: inline-block;
+}
+
+.add-option {
+  display: inline-block;
+  width: 100%;
+  text-align: center;
+  cursor: pointer;
+}
+
+.footer-box {
+  text-align: center;
+}
+
+/deep/ .search-box {
+  width: 240px;
+  border: 1px solid #DCDFE6;
+  .el-input {
+    width: 216px;
+  }
+  .el-input__inner {
+    border: none
+  }
+}
+
+.addPages {
+  /deep/ .el-input,.el-select,.el-cascader,.el-date-editor,.el-date-editor.el-input{
+    width:320px;
+  }
+  .el-form-item{
+    margin-bottom:2px
+  }
+}
+
+.detail-table {
+  /deep/ .el-input,.el-select,.el-cascader,.el-date-editor,.el-date-editor.el-input{
+    width:100% !important;
+  }
+}
+.distpicker-address-wrapper select {
+  height: 32px !important;
+  padding: 0 .75rem !important;
+  font-size: 14px !important;
+  color: #606266 !important;
+}
+
+.search-dialog {
+  .el-form-item__content {
+    height: 37px !important;
+  }
+  .el-form-item {
+    padding-left:80px!important
+  }
+  .el-form-item__label {
+    line-height: 37px !important;
+  }
+  .el-input,.el-select,.el-date-editor{
+    width: 320px !important;
+  }
+  .search-footer {
+    width: 80% !important;
+    text-align: right;
+  }
+  .form-footer {
+    padding-bottom: 8px;
+  }
+}
+
+.add-dialog {
+  padding-bottom: 20px
+}

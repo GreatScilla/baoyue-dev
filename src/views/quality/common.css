@@ -1,0 +1,23 @@
+.handlePages{
+    background-color: #fff;
+      padding: 6px  !important;
+  }
+  .iptWidth {
+    width: 250px;
+  }
+  .margin_30 {
+    margin: 30px 0 10px;
+  }
+  .el-col {
+    margin-bottom: 0;
+  }
+  .el-form-item {
+    margin-bottom: 0;
+  }
+  .el-form-item  .el-form-item__label{
+    line-height: 38px;
+  }
+  .el-form-item /deep/ .el-form-item__content {
+      line-height: 38px;
+  }
+  

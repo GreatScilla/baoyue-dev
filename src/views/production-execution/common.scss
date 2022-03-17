@@ -1,0 +1,40 @@
+.title {
+  width: 100%;
+  height: 60px;
+  background: #157a2c;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  .item {
+    margin-left: 50px;
+    i {
+      color: #ffffff;
+      margin-right: 10px;
+    }
+    .font {
+      font-size: 16px;
+      font-family: MicrosoftYaHei-Bold, MicrosoftYaHei;
+      font-weight: bold;
+      color: #ffffff;
+      line-height: 16px;
+    }
+  }
+  .back {
+    margin-right: 20px;
+    i {
+      width: 14px;
+      height: 11px;
+      color: #ffffff;
+      margin-right: 10px;
+    }
+    .font {
+      height: 14px;
+      font-size: 14px;
+      font-family: PingFangSC-Regular, PingFang SC;
+      font-weight: 400;
+      color: #ffffff;
+      line-height: 14px;
+    }
+  }
+}

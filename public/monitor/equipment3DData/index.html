@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <!-- <title>Unity WebGL Player | Factory</title> -->
+    <!-- <link rel="shortcut icon" href="TemplateData/favicon.ico"> -->
+    <link rel="stylesheet" href="TemplateData/style.css">
+    <script src="TemplateData/UnityProgress.js"></script>
+    <script src="Build/UnityLoader.js"></script>
+    <script src="https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js"></script>
+    <script>
+      var unityInstance = UnityLoader.instantiate("unityContainer", "Build/v3.json", {onProgress: UnityProgress});
+      function getData(id, url) {
+      let tenantId = JSON.parse(localStorage.getItem("saber-tenantId")).content
+      let authorization = JSON.parse(localStorage.getItem("saber-Authorization")).content
+      let bladeAuth = JSON.parse(localStorage.getItem("saber-token")).content
+      let headers = {
+        "Tenant-Id": tenantId,
+        "Authorization": authorization,
+        "Blade-Auth": "bearer " + bladeAuth
+      }
+      var data = null;
+      $.ajax({
+        type: "get",
+        data: { deviceId: id },
+        headers: headers,
+        dataType: 'json',
+        contentType: 'application/x-www-form-urlencoded',
+        processData: true,
+        url: url,
+        cache: false,
+        async: false,
+        success: function (result) {
+          if (result.success) {
+            data = result.data
+          }
+        },
+        error: function (err) {
+        }
+      });
+      return data;
+    }
+    function GetInfos(id) {
+      console.log(id);
+      var data = getData("", '/api/blade-erp/depotProductStock/getStock')
+      if (id == 57) {
+        return data.limeCanA
+      } else if (id == 58) {
+        return data.limeCanB
+      } else if (id == 59) {
+        return data.cementDumpA
+      } else if (id == 60) {
+        return data.cementDumpB
+      } else if (id == 71) {
+        return data.aluminium
+      } else if (id == 62) {
+        return data.rawMaterialA
+      } else if (id == 63) {
+        return String(data.rawMaterialB)
+      } else if (id == 64) {
+        return data.rawMaterialC
+      } else if (id == 65) {
+        return data.rawMaterialD
+      } else if (id == 66) {
+        return data.rawMaterialE
+      } else if (id == 55) {
+        return data.indoorStorageArea
+      } else if (id == 56) {
+        return data.outdoorYard
+      } else if (id == 69) {
+        return (data.numberIdle + "," + data.usageQuantity)
+      } else {
+        data = getData(id, "/api/blade-rcm/tagIndex/getDeviceInfo")
+        return JSON.stringify(data)
+      }
+    }
+    </script>
+  </head>
+  <body>
+    <div class="webgl-content">
+      <div id="unityContainer" style="width: 1885px; height: 850px"></div>
+      <div class="footer">
+        <!-- <div class="webgl-logo"></div> -->
+        <div class="fullscreen" onclick="unityInstance.SetFullscreen(1)"></div>
+        <!-- <div class="title">Factory</div> -->
+      </div>
+    </div>
+  </body>
+</html>
